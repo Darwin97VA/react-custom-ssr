@@ -4,8 +4,11 @@ import App from '../../src/App'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import { StaticRouter } from 'react-router-dom'
+import { Provider } from 'react-redux'
+import reducers from './../../src/redux'
+import { createStore } from 'redux'
 
-const processIndex = (res, appComponent, result, context) => new Promise((resolve, reject) => {
+const processIndex = (res, appComponent, preloadedState, context) => new Promise((resolve, reject) => {
     try {
         const indexFile = path.resolve('./build/index.html') 
         fs.readFile(indexFile, 'utf-8', (err, content) => {
@@ -19,7 +22,11 @@ const processIndex = (res, appComponent, result, context) => new Promise((resolv
             res.send(content.replace(
                 '<div id="root"></div>',
                 `<div id="root">${appComponent}</div>
-                <script> window.__data__ = ${result} </script>
+                <script>
+                    window.__PRELOADED_STATE__ = ${JSON
+                        .stringify(preloadedState)
+                        .replace(/</g,'\\u003c')}
+                </script>
                 `
             ))
             resolve()
@@ -32,17 +39,20 @@ const processIndex = (res, appComponent, result, context) => new Promise((resolv
 export default app => (route, getData={}) => {
     app.get(route, async (req, res) => {
         try {
-            const resultData = ( typeof getData === 'function'
+            const preloadedState = ( typeof getData === 'function'
                                 ? await getData(req, res) : getData )
             const context = {}
+
+            const store = createStore(reducers, preloadedState)
+
             const appComponent = ReactDOMServer.renderToStaticMarkup(
-                // <Provider store={}>
+                <Provider store={store}>
                     <StaticRouter location={req.url} context={context}>
-                        <App {...resultData} />
+                        <App />
                     </StaticRouter>
-                // </Provider>
+                </Provider>
             )
-            return await processIndex(res, appComponent, resultData, context)
+            return await processIndex(res, appComponent, preloadedState, context)
         } catch(e) {
             console.error(e)
             return res.status(500).send('Ocurrió un error.')

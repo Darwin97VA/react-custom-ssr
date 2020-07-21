@@ -3,15 +3,24 @@ import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import reducers from './redux'
 
-if(!window.__data__) {
-  window.__data__ = {}
+if(!window.__PRELOADED_STATE__) {
+  window.__PRELOADED_STATE__ = {}
 }
+const preloadedState = window.__PRELOADED_STATE__
+delete window.__PRELOADED_STATE__
+
+const store = createStore(reducers, preloadedState)
 
 ReactDOM.hydrate(
-  <BrowserRouter>
-    <App {...window.__data__} />
-  </BrowserRouter>
+  <Provider store={store}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </Provider>
   ,
   document.getElementById('root')
 );
