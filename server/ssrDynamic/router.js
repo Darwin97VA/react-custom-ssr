@@ -2,10 +2,8 @@ import { Router } from 'express'
 import convert from './convert'
 
 const router = Router()
-const dynamic = convert(router)
+const setDynamic = convert(router)
 
-dynamic('/' , req => {
-
-})
+setDynamic('/')
 
 export default router

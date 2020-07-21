@@ -11,4 +11,4 @@ require('@babel/register')({
     ]
 })
 
-require('./generate.js')
+require('./routes.js')

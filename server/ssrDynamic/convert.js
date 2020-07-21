@@ -7,7 +7,7 @@ import { StaticRouter } from 'react-router-dom'
 
 const processIndex = (res, appComponent, result, context) => new Promise((resolve, reject) => {
     try {
-        const indexFile = path.resolve('./build/index.html') // será un nivel más arriba?
+        const indexFile = path.resolve('./build/index.html') 
         fs.readFile(indexFile, 'utf-8', (err, content) => {
             if(err) {
                 console.error(err)
@@ -36,9 +36,11 @@ export default app => (route, getData={}) => {
                                 ? await getData(req, res) : getData )
             const context = {}
             const appComponent = ReactDOMServer.renderToStaticMarkup(
-                <StaticRouter location={req.url} context={context}>
-                    <App {...resultData} />
-                </StaticRouter>
+                // <Provider store={}>
+                    <StaticRouter location={req.url} context={context}>
+                        <App {...resultData} />
+                    </StaticRouter>
+                // </Provider>
             )
             return await processIndex(res, appComponent, resultData, context)
         } catch(e) {

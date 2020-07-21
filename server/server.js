@@ -1,8 +1,8 @@
 import express from 'express'
 import path from 'path'
 
-import ssrStatic from './ssrStatic'
-import ssrDynamic from './ssrDynamic'
+import ssrStatic from './ssrStatic/router'
+import ssrDynamic from './ssrDynamic/router'
 
 const app = express()
 const PORT = process.env.PORT || 3040

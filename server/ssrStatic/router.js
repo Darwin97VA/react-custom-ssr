@@ -8,10 +8,9 @@ const directoryPages = path.resolve(__dirname, 'pages')
 const routes = fs.readdirSync(directoryPages).map(file=>'/'+file.split('.html')[0])
 
 router.get('*', (req, res, next) => {
-    const route = routes.find(route=>route+'/'===req.url)
+    const route = routes.find(route=>route===req.url||route+'/'===req.url)
     if(route) {
         const file = path.resolve('./server/ssrStatic/pages'+route+'.html')
-        console.log(file)
         try {
             fs.readFile(file, 'utf-8', (err, html) => {
                 if(err) {
