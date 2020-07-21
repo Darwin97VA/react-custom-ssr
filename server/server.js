@@ -3,9 +3,12 @@ import path from 'path'
 
 import ssrStatic from './ssrStatic/router'
 import ssrDynamic from './ssrDynamic/router'
+import api from './api'
 
 const app = express()
 const PORT = process.env.PORT || 3040
+
+app.use('/api', api)
 
 app.use(ssrStatic)
 app.use(ssrDynamic)
