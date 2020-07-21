@@ -1,6 +1,6 @@
 # React Custom SSR
 
-Started kit para desarrollar aplicaciones universales basado en CRA, express y redux para centrarse en sólo en la lógica del negocio.
+Starter kit for develop universal react applications based on CRA, express and redux to focus only on business logic.
 
 ## Routes for SSR Dynamic
 /server/ssrDynamic/router
